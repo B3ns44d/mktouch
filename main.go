@@ -14,25 +14,25 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "mktouch <filename>",
-	Short: "Create an empty file at the specified path",
-	Args:  cobra.ExactArgs(1),
+	Use:   "mktouch -p <path>/<filename...>",
+	Short: "Create empty files at the specified paths",
+	Args:  cobra.MinimumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		filename := args[0]
-
-		if createParents {
-			err := os.MkdirAll(filepath.Dir(filename), 0755)
-			if err != nil {
-				return fmt.Errorf("error creating directory: %w", err)
+		for _, filename := range args {
+			if createParents {
+				err := os.MkdirAll(filepath.Dir(filename), 0755)
+				if err != nil {
+					return fmt.Errorf("error creating directory: %w", err)
+				}
 			}
-		}
 
-		file, err := os.OpenFile(filename, os.O_RDONLY|os.O_CREATE, permissions)
-		if err != nil {
-			return fmt.Errorf("error creating file: %w", err)
-		}
+			file, err := os.OpenFile(filename, os.O_RDONLY|os.O_CREATE, permissions)
+			if err != nil {
+				return fmt.Errorf("error creating file: %w", err)
+			}
 
-		file.Close()
+			file.Close()
+		}
 		return nil
 	},
 }
@@ -48,4 +48,3 @@ func main() {
 		os.Exit(1)
 	}
 }
-
