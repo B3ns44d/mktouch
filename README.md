@@ -7,7 +7,7 @@
 To install `mktouch`, run the following command:
 
 ```bash
-go get -u github.com/B3ns44d/mktouch
+go install github.com/B3ns44d/mktouch@latest
 ```
 
 
